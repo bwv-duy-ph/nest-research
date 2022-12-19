@@ -33,11 +33,11 @@ export class AuthService {
 
       // Check if user with desired username already exists
       const desiredUsername: string = registerDto.username;
-      const existingUser: UserEntity = await this.userRepo.findOne({
+      const existingUserCount = await this.userRepo.count({
         username: desiredUsername,
       });
 
-      if (existingUser) {
+      if (existingUserCount > 0) {
         throw new BadRequestException(messages.error.USER_EXISTS);
       }
 
