@@ -32,9 +32,9 @@ export class AuthService {
       }
 
       // Check if user with desired username already exists
-      const desiredUsername: string = registerDto.username;
+      const usernameToCheckForExistence: string = registerDto.username;
       const existingUserCount = await this.userRepo.count({
-        username: desiredUsername,
+        username: usernameToCheckForExistence,
       });
 
       if (existingUserCount > 0) {

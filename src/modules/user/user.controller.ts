@@ -26,7 +26,7 @@ export class UserController {
   @Roles(Role.Admin)
   @Get('users')
   async findAll(): Promise<UserEntity[]> {
-    return this.userService.findAll();
+    return this.userService.find();
   }
 
   @ApiBearerAuth()
