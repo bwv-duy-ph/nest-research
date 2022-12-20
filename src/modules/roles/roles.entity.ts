@@ -1,13 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { IsNotEmpty, IsNumber } from 'class-validator';
 import { UserEntity } from '../users/users.entity';
+import { BaseEntity } from '../shared/base.entity';
 
 @Entity()
-export class RoleEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class RoleEntity extends BaseEntity {
   @Column()
   @IsNotEmpty()
   @ApiProperty({ type: String })
