@@ -1,8 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiBody } from '@nestjs/swagger';
+import { LoginDto, RegiterDto } from '../dto/auth.dto';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
-import { RegiterDto } from './dto/register.dto';
 
 @Controller()
 export class AuthController {

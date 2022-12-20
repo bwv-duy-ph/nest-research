@@ -8,15 +8,15 @@ import {
   Param,
   UseGuards,
 } from '@nestjs/common';
-import { RoleService } from './role.service';
-import { RoleEntity } from './entities/role.entity';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/modules/auth/authentication/jwt-auth.guard';
-import { Roles } from 'src/modules/auth/authorization/role.decorator';
 import { DeleteResult, UpdateResult } from 'typeorm';
-import { RolesGuard } from 'src/modules/auth/authorization/role.guard';
 import { Role } from 'src/enums/role.enum';
 import { REST } from 'src/interfaces/rest.interface';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/auth.guard';
+import { RoleService } from './roles.service';
+import { Roles } from 'src/auth/auth.decorator';
+import { RoleEntity } from './roles.entity';
 
 @Controller()
 @UseGuards(JwtAuthGuard, RolesGuard)

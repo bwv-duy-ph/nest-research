@@ -5,14 +5,13 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/modules/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { LoginDto } from './dto/login.dto';
-import { RegiterDto } from './dto/register.dto';
 import validate from 'validator';
 import { messages } from 'src/constants';
 import { Role } from 'src/enums/role.enum';
+import { UserEntity } from 'src/modules/users/users.entity';
+import { RegiterDto, LoginDto } from '../dto/auth.dto';
 
 @Injectable()
 export class AuthService {

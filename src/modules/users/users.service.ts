@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
-import { UserEntity } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { REST } from 'src/interfaces/rest.interface';
+import { UserEntity } from './users.entity';
 
 @Injectable()
 export class UserService implements REST {
