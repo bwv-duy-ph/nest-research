@@ -1,7 +1,8 @@
 import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setUp } from './app.service';
+import { AllExceptionsFilter } from './exceptions/all-exceptions.filter';
 
 async function startApplication(): Promise<void> {
   // Create the Nest application
@@ -9,6 +10,10 @@ async function startApplication(): Promise<void> {
 
   // Enable global validation pipes
   nestApplication.useGlobalPipes(new ValidationPipe());
+
+  // Enable global exceptions
+  const { httpAdapter } = nestApplication.get(HttpAdapterHost);
+  nestApplication.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
   // Set up Swagger and start the application
   setUp(nestApplication);
