@@ -1,11 +1,15 @@
 {
   "type": "mysql",
-  "host": "localhost",
+  "host": "103.97.126.24",
   "port": 3306,
-  "username": "root",
-  "password": "",
-  "database": "",
+  "username": "gjmhqdqv_testdb",
+  "password": "1234qwer",
+  "database": "gjmhqdqv_testdb",
   "synchronize": false,
   "logging": false,
-  "entities": ["src/entity/**/*.ts"]
+  "entities": ["dist/**/*.entity{.ts,.js}"],
+  "migrations": ["dist/migrations/*{.ts,.js}"],
+  "cli": {
+    "migrationsDir": "src/migrations"
+  }
 }

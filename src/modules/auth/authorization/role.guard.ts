@@ -31,11 +31,11 @@ export class RolesGuard implements CanActivate {
       );
 
       // Extract and decode the JWT token from the request headers
-      const token = httpRequest.headers.authorization.split(' ')[1];
+      const token = httpRequest.headers.authorization.split(' ').pop();
       const decodedToken = decode(token);
 
       // Check if the user has the required role
-      if (requiredRoles.includes(decodedToken['role'])) {
+      if (requiredRoles.includes(decodedToken['userRole'])) {
         return true;
       } else {
         throw new UnauthorizedException('User does not have the required role');
