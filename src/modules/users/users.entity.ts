@@ -10,7 +10,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { RoleEntity } from '../roles/roles.entity';
 import { BaseEntity } from '../shared/base.entity';
 
-@Entity()
+@Entity('users')
 export class UserEntity extends BaseEntity {
   @IsString()
   @IsEmail()

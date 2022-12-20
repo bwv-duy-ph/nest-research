@@ -4,7 +4,7 @@ import { IsNotEmpty, IsNumber } from 'class-validator';
 import { UserEntity } from '../users/users.entity';
 import { BaseEntity } from '../shared/base.entity';
 
-@Entity()
+@Entity('roles')
 export class RoleEntity extends BaseEntity {
   @Column()
   @IsNotEmpty()

@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import AppConfiguration from './config/app.config';
+import { AppConfiguration } from './config/app.config';
 
 export const setUp = async (
   nestApplication: INestApplication,

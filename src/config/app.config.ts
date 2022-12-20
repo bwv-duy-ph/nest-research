@@ -1,6 +1,4 @@
-import 'dotenv/config';
-
-const AppConfiguration = {
+export const AppConfiguration = {
   nodeEnv: process.env.NODE_ENV || 'development',
   port: Number(process.env.PORT) || 8080,
   jwt: {
@@ -18,5 +16,3 @@ const AppConfiguration = {
     },
   },
 };
-
-export default AppConfiguration;
