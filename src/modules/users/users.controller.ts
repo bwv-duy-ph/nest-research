@@ -22,7 +22,7 @@ import { EntityNotFoundExceptionFilter } from '../../exceptions/entity-not-found
 import { UpdateUserDto } from './dto/update-user.dto';
 import { REST } from '../../interfaces/rest.interface';
 
-@Controller()
+@Controller('user')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags('User')
 @UseFilters(new EntityNotFoundExceptionFilter())
@@ -32,7 +32,7 @@ export class UserController implements REST {
   @ApiBearerAuth()
   @Roles(Role.Admin)
   @UseInterceptors(ClassSerializerInterceptor)
-  @Get('users')
+  @Get()
   async find(): Promise<UserEntity[]> {
     return this.userService.find();
   }
@@ -40,14 +40,14 @@ export class UserController implements REST {
   @ApiBearerAuth()
   @Roles(Role.Admin, Role.Staff)
   @UseInterceptors(ClassSerializerInterceptor)
-  @Get('user/:id')
+  @Get(':id')
   async findOne(@Param('id') id: number): Promise<UserEntity> {
     return this.userService.findOne(id);
   }
 
   @ApiBearerAuth()
   @Roles(Role.Admin, Role.Staff)
-  @Patch('user/:id')
+  @Patch(':id')
   async update(
     @Param('id') id: number,
     @Body() user: UpdateUserDto,
@@ -57,7 +57,7 @@ export class UserController implements REST {
 
   @ApiBearerAuth()
   @Roles(Role.Admin)
-  @Delete('user/:id')
+  @Delete(':id')
   async delete(@Param('id') id: number): Promise<DeleteResult> {
     return this.userService.delete(id);
   }

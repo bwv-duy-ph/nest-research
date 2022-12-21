@@ -22,7 +22,7 @@ import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { EntityNotFoundExceptionFilter } from '../../exceptions/entity-not-found-exception.filter';
 
-@Controller()
+@Controller('company')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags('Company')
 @UseFilters(new EntityNotFoundExceptionFilter())
@@ -31,14 +31,14 @@ export class CompanyController implements REST {
 
   @ApiBearerAuth()
   @Roles(Role.Admin)
-  @Get('company')
+  @Get()
   async find(): Promise<CompanyEntity[]> {
     return this.companyService.find();
   }
 
   @ApiBearerAuth()
   @Roles(Role.Admin)
-  @Get('company/:id')
+  @Get(':id')
   async findOne(@Param('id') id: number): Promise<CompanyEntity> {
     return this.companyService.findOne(id);
   }
@@ -46,7 +46,7 @@ export class CompanyController implements REST {
   @ApiBearerAuth()
   @Roles(Role.Admin)
   @ApiBody({ type: CreateCompanyDto })
-  @Post('company')
+  @Post()
   async create(@Body() company: CreateCompanyDto): Promise<CompanyEntity> {
     return this.companyService.create(company);
   }
@@ -54,7 +54,7 @@ export class CompanyController implements REST {
   @ApiBearerAuth()
   @Roles(Role.Admin)
   @ApiBody({ type: UpdateCompanyDto })
-  @Patch('company/:id')
+  @Patch(':id')
   async update(
     @Param('id') id: number,
     @Body() company: UpdateCompanyDto,
@@ -64,7 +64,7 @@ export class CompanyController implements REST {
 
   @ApiBearerAuth()
   @Roles(Role.Admin)
-  @Delete('company/:id')
+  @Delete(':id')
   async delete(@Param('id') id: number): Promise<DeleteResult> {
     return this.companyService.delete(id);
   }
