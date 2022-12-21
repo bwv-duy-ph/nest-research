@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateResult, DeleteResult, Repository } from 'typeorm';
 import { REST } from 'src/interfaces/rest.interface';
 import { RoleEntity } from './roles.entity';
+import { CreateRoleDto } from './dto/create-role.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Injectable()
 export class RoleService implements REST {
@@ -19,11 +21,11 @@ export class RoleService implements REST {
     return await this.roleRepo.findOne(id);
   }
 
-  async create(role: RoleEntity): Promise<RoleEntity> {
+  async create(role: CreateRoleDto): Promise<RoleEntity> {
     return await this.roleRepo.save(role);
   }
 
-  async update(id: number, role: RoleEntity): Promise<UpdateResult> {
+  async update(id: number, role: UpdateRoleDto): Promise<UpdateResult> {
     return await this.roleRepo.update(id, role);
   }
 

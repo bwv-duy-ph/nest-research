@@ -17,6 +17,8 @@ import { RolesGuard } from 'src/auth/auth.guard';
 import { RoleService } from './roles.service';
 import { Roles } from 'src/auth/auth.decorator';
 import { RoleEntity } from './roles.entity';
+import { CreateRoleDto } from './dto/create-role.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 
 @Controller()
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -40,18 +42,19 @@ export class RoleController implements REST {
 
   @ApiBearerAuth()
   @Roles(Role.Admin)
-  @ApiBody({ type: RoleEntity })
+  @ApiBody({ type: CreateRoleDto })
   @Post('role')
-  async create(@Body() role: RoleEntity): Promise<RoleEntity> {
+  async create(@Body() role: CreateRoleDto): Promise<RoleEntity> {
     return this.roleService.create(role);
   }
 
   @ApiBearerAuth()
   @Roles(Role.Admin)
+  @ApiBody({ type: UpdateRoleDto })
   @Patch('role/:id')
   async update(
     @Param('id') id: number,
-    @Body() role: RoleEntity,
+    @Body() role: UpdateRoleDto,
   ): Promise<UpdateResult> {
     return this.roleService.update(id, role);
   }
