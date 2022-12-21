@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './modules/users/users.module';
-import { RoleModule } from './modules/roles/roles.module';
+import { CompanyModule } from './modules/company/company.module';
 
 @Module({
   imports: [
@@ -11,7 +11,7 @@ import { RoleModule } from './modules/roles/roles.module';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot(),
     UserModule,
-    RoleModule,
+    CompanyModule,
   ],
 })
 export class AppModule {}

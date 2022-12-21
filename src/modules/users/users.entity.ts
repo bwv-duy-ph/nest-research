@@ -7,7 +7,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { RoleEntity } from '../roles/roles.entity';
+import { CompanyEntity } from '../company/company.entity';
 import { BaseEntity } from '../shared/base.entity';
 
 @Entity('users')
@@ -45,10 +45,15 @@ export class UserEntity extends BaseEntity {
 
   @IsNumber()
   @ApiProperty({ type: Number })
-  @ManyToOne(() => RoleEntity, {
+  @Column()
+  role: number;
+
+  @IsNumber()
+  @ApiProperty({ type: Number })
+  @ManyToOne(() => CompanyEntity, {
     eager: true,
     cascade: true,
   })
   @JoinColumn()
-  role: RoleEntity;
+  company: CompanyEntity;
 }

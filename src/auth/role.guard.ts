@@ -29,7 +29,7 @@ export class RolesGuard implements CanActivate {
         executionContext.getHandler(),
       );
 
-      // Extract and decode the JWT token from the request headers
+      // Extract and decode the access token from the request headers
       const token = httpRequest.headers.authorization.split(' ').pop();
       const decodedToken = decode(token);
 
@@ -42,7 +42,7 @@ export class RolesGuard implements CanActivate {
     } catch (error) {
       // Handle errors
       if (error instanceof JsonWebTokenError) {
-        throw new UnauthorizedException('Invalid or expired JWT token');
+        throw new UnauthorizedException('Invalid or expired access token');
       } else {
         throw error;
       }

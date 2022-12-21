@@ -8,9 +8,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import validate from 'validator';
-import { messages } from 'src/constants';
-import { Role } from 'src/enums/role.enum';
-import { UserEntity } from 'src/modules/users/users.entity';
+import { messages } from '../constants';
+import { Role } from '../enums/role.enum';
+import { UserEntity } from '../modules/users/users.entity';
 import { RegiterDto, LoginDto } from './dto/auth.dto';
 import { RefreshToken } from './refresh-token.entity';
 import { v4 as uuid } from 'uuid';
@@ -52,12 +52,12 @@ export class AuthService {
       const accessToken = this.jwtService.sign({
         userId: savedUser.id,
         username: savedUser.username,
-        userRole: savedUser.role ? savedUser.role.flag : Role.User,
+        userRole: savedUser.role || Role.User,
       });
 
       const refreshToken = await this.createRefreshToken(savedUser.id);
 
-      // Return the success message and the JWT token.
+      // Return the success message and the access token.
       return {
         message: messages.info.REGISTER_SUCCESS,
         userId: savedUser.id,
@@ -102,12 +102,12 @@ export class AuthService {
       const accessToken = this.jwtService.sign({
         userId: user.id,
         username: user.username,
-        userRole: user.role ? user.role.flag : Role.User,
+        userRole: user.role || Role.User,
       });
 
       const refreshToken = await this.createRefreshToken(user.id);
 
-      // Return the success message and the JWT token.
+      // Return the success message and the access token.
       return {
         message: messages.info.LOGIN_SUCCESS,
         accessToken,
@@ -151,7 +151,7 @@ export class AuthService {
       const accessToken = this.jwtService.sign({
         userId: token.userId,
         username: user.username,
-        userRole: user.role ? user.role.flag : Role.User,
+        userRole: user.role || Role.User,
       });
 
       // Return the new access token

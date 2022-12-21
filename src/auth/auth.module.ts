@@ -5,8 +5,8 @@ import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppConfiguration } from 'src/config/app.config';
-import { UserEntity } from 'src/modules/users/users.entity';
+import { AppConfiguration } from '../config/app.config';
+import { UserEntity } from '../modules/users/users.entity';
 import { RefreshToken } from './refresh-token.entity';
 
 @Module({

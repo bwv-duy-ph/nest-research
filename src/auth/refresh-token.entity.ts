@@ -1,4 +1,4 @@
-import { BaseEntity } from 'src/modules/shared/base.entity';
+import { BaseEntity } from '../modules/shared/base.entity';
 import { Entity, Column } from 'typeorm';
 
 @Entity('refreshToken')

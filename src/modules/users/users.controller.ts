@@ -6,26 +6,31 @@ import {
   Param,
   UseGuards,
   Patch,
+  UseFilters,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
-import { Role } from 'src/enums/role.enum';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Roles } from 'src/auth/auth.decorator';
-import { RolesGuard } from 'src/auth/auth.guard';
+import { Role } from '../../enums/role.enum';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { Roles } from '../../auth/auth.decorator';
+import { RolesGuard } from '../../auth/role.guard';
 import { UserEntity } from './users.entity';
 import { UserService } from './users.service';
+import { EntityNotFoundExceptionFilter } from '../../exceptions/entity-not-found-exception.filter';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { REST } from '../../interfaces/rest.interface';
 
 @Controller()
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags('User')
-export class UserController {
+@UseFilters(new EntityNotFoundExceptionFilter())
+export class UserController implements REST {
   constructor(private readonly userService: UserService) {}
 
   @ApiBearerAuth()
   @Roles(Role.Admin)
   @Get('users')
-  async findAll(): Promise<UserEntity[]> {
+  async find(): Promise<UserEntity[]> {
     return this.userService.find();
   }
 
@@ -41,7 +46,7 @@ export class UserController {
   @Patch('user/:id')
   async update(
     @Param('id') id: number,
-    @Body() user: UserEntity,
+    @Body() user: UpdateUserDto,
   ): Promise<UpdateResult> {
     return this.userService.update(id, user);
   }
