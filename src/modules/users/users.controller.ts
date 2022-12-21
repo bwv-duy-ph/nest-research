@@ -14,7 +14,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { Role } from '../../enums/role.enum';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
-import { Roles } from '../../auth/auth.decorator';
+import { Roles } from '../../auth/role.decorator';
 import { RolesGuard } from '../../auth/role.guard';
 import { UserEntity } from './users.entity';
 import { UserService } from './users.service';

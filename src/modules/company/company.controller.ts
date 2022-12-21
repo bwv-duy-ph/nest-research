@@ -16,7 +16,7 @@ import { REST } from '../../interfaces/rest.interface';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { RolesGuard } from '../../auth/role.guard';
 import { CompanyService } from './company.service';
-import { Roles } from '../../auth/auth.decorator';
+import { Roles } from '../../auth/role.decorator';
 import { CompanyEntity } from './company.entity';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';

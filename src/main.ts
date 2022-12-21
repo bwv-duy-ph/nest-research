@@ -3,6 +3,7 @@ import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setUp } from './app.service';
 import { AllExceptionsFilter } from './exceptions/all-exceptions.filter';
+import { RequestLoggerInterceptor } from './interceptors/logger.interceptor';
 
 async function startApplication(): Promise<void> {
   // Create the Nest application
@@ -10,6 +11,9 @@ async function startApplication(): Promise<void> {
 
   // Enable global validation pipes
   nestApplication.useGlobalPipes(new ValidationPipe());
+
+  // Enable global interceptors
+  nestApplication.useGlobalInterceptors(new RequestLoggerInterceptor());
 
   // Enable global exceptions
   const { httpAdapter } = nestApplication.get(HttpAdapterHost);
