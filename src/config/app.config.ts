@@ -1,6 +1,9 @@
 export const AppConfiguration = {
   nodeEnv: process.env.NODE_ENV || 'development',
   port: Number(process.env.PORT) || 8080,
+  bcrypt: {
+    salt: 10,
+  },
   jwt: {
     secret: process.env.JWT_SECRET || 'sAmPlEsEcReT',
     expiration: '60m',

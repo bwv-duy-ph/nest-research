@@ -7,6 +7,8 @@ import {
   UseGuards,
   Patch,
   UseFilters,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
@@ -29,6 +31,7 @@ export class UserController implements REST {
 
   @ApiBearerAuth()
   @Roles(Role.Admin)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('users')
   async find(): Promise<UserEntity[]> {
     return this.userService.find();
@@ -36,6 +39,7 @@ export class UserController implements REST {
 
   @ApiBearerAuth()
   @Roles(Role.Admin, Role.Staff)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('user/:id')
   async findOne(@Param('id') id: number): Promise<UserEntity> {
     return this.userService.findOne(id);

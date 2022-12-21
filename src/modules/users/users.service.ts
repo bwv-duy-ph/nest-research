@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { REST } from '../../interfaces/rest.interface';
 import { UserEntity } from './users.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AppConfiguration } from '../../config/app.config';
 
 @Injectable()
 export class UserService implements REST {
@@ -29,7 +30,10 @@ export class UserService implements REST {
 
     if (updatedUser.password) {
       // Hash the user's password
-      const hashedPassword = await bcrypt.hash(updatedUser.password, 12);
+      const hashedPassword = await bcrypt.hash(
+        updatedUser.password,
+        AppConfiguration.bcrypt.salt,
+      );
       updatedUser.password = hashedPassword;
     }
 

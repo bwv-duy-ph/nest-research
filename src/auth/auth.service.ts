@@ -15,6 +15,7 @@ import { RegiterDto, LoginDto } from './dto/auth.dto';
 import { RefreshToken } from './refresh-token.entity';
 import { v4 as uuid } from 'uuid';
 import { validateOrReject } from 'class-validator';
+import { AppConfiguration } from '../config/app.config';
 
 @Injectable()
 export class AuthService {
@@ -43,7 +44,10 @@ export class AuthService {
       }
 
       // Hash password
-      const hashedPassword = await bcrypt.hash(registerDto.password, 12);
+      const hashedPassword = await bcrypt.hash(
+        registerDto.password,
+        AppConfiguration.bcrypt.salt,
+      );
       registerDto.password = hashedPassword;
 
       // Save user to database and return success message with user ID

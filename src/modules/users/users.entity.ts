@@ -9,6 +9,7 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 import { CompanyEntity } from '../company/company.entity';
 import { BaseEntity } from '../shared/base.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -41,6 +42,7 @@ export class UserEntity extends BaseEntity {
   })
   @ApiProperty({ type: String })
   @Column()
+  @Exclude()
   password: string;
 
   @IsNumber()
