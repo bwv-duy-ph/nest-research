@@ -3,7 +3,6 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
-  InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -45,9 +44,7 @@ export class RolesGuard implements CanActivate {
       if (error instanceof JsonWebTokenError) {
         throw new UnauthorizedException('Invalid or expired JWT token');
       } else {
-        throw new InternalServerErrorException(
-          'Error while checking user role',
-        );
+        throw error;
       }
     }
   }

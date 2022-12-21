@@ -3,7 +3,7 @@ export const AppConfiguration = {
   port: Number(process.env.PORT) || 8080,
   jwt: {
     secret: process.env.JWT_SECRET || 'sAmPlEsEcReT',
-    expiration: '3d',
+    expiration: '60m',
   },
   redis: {
     master: {

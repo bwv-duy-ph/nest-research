@@ -11,32 +11,34 @@ import validate from 'validator';
 import { messages } from 'src/constants';
 import { Role } from 'src/enums/role.enum';
 import { UserEntity } from 'src/modules/users/users.entity';
-import { RegiterDto, LoginDto } from '../dto/auth.dto';
+import { RegiterDto, LoginDto } from './dto/auth.dto';
+import { RefreshToken } from './refresh-token.entity';
+import { v4 as uuid } from 'uuid';
+import { validateOrReject } from 'class-validator';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
-    private readonly userRepo: Repository<UserEntity>,
+    private readonly userRepository: Repository<UserEntity>,
+    @InjectRepository(RefreshToken)
+    private readonly refreshTokenRepository: Repository<RefreshToken>,
     private jwtService: JwtService,
   ) {}
 
   async register(
     registerDto: RegiterDto,
-  ): Promise<{ message: string; userId?: string | number }> {
+  ): Promise<Record<string, string | number>> {
     try {
-      // Validate input
-      if (!registerDto.username || !registerDto.password) {
-        throw new BadRequestException('Username and password are required');
-      }
+      // Validate the registerDto object
+      await validateOrReject(registerDto);
 
       // Check if user with desired username already exists
-      const usernameToCheckForExistence: string = registerDto.username;
-      const existingUserCount = await this.userRepo.count({
-        username: usernameToCheckForExistence,
+      const existingUser = await this.userRepository.findOne({
+        username: registerDto.username,
       });
 
-      if (existingUserCount > 0) {
+      if (existingUser) {
         throw new BadRequestException(messages.error.USER_EXISTS);
       }
 
@@ -45,8 +47,23 @@ export class AuthService {
       registerDto.password = hashedPassword;
 
       // Save user to database and return success message with user ID
-      const savedUser = await this.userRepo.save(registerDto);
-      return { message: messages.info.REGISTER_SUCCESS, userId: savedUser.id };
+      const savedUser = await this.userRepository.save(registerDto);
+
+      const accessToken = this.jwtService.sign({
+        userId: savedUser.id,
+        username: savedUser.username,
+        userRole: savedUser.role ? savedUser.role.flag : Role.User,
+      });
+
+      const refreshToken = await this.createRefreshToken(savedUser.id);
+
+      // Return the success message and the JWT token.
+      return {
+        message: messages.info.REGISTER_SUCCESS,
+        userId: savedUser.id,
+        accessToken,
+        refreshToken,
+      };
     } catch (error) {
       // Handle errors
       if (error instanceof BadRequestException) {
@@ -65,7 +82,7 @@ export class AuthService {
 
     try {
       // Find the user with the given 'username' or 'email', depending on the value of 'isEmail'.
-      const user = await this.userRepo.findOne({
+      const user = await this.userRepository.findOne({
         [isEmail ? 'email' : 'username']: username,
       });
 
@@ -82,16 +99,65 @@ export class AuthService {
         throw new Error(messages.error.INVALID_PASSWORD);
       }
 
-      const jwt = this.jwtService.sign({
+      const accessToken = this.jwtService.sign({
         userId: user.id,
         username: user.username,
         userRole: user.role ? user.role.flag : Role.User,
       });
 
+      const refreshToken = await this.createRefreshToken(user.id);
+
       // Return the success message and the JWT token.
-      return { message: messages.info.LOGIN_SUCCESS, token: jwt };
+      return {
+        message: messages.info.LOGIN_SUCCESS,
+        accessToken,
+        refreshToken: refreshToken,
+      };
     } catch (error) {
       // Handle errors
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async createRefreshToken(userId: number): Promise<string> {
+    // Generate a new refresh token
+    const refreshToken = new RefreshToken();
+    refreshToken.token = uuid();
+    refreshToken.userId = userId;
+    refreshToken.expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
+
+    // Save the refresh token to the database
+    await this.refreshTokenRepository.save(refreshToken);
+
+    // Return the refresh token value
+    return refreshToken.token;
+  }
+
+  async refresh(refreshToken: string): Promise<string> {
+    try {
+      // Look up the refresh token in the database
+      const token = await this.refreshTokenRepository.findOne({
+        token: refreshToken,
+      });
+
+      // If the token is not found or has expired, throw an error
+      if (!token || token.expiresAt < new Date()) {
+        throw new Error('Invalid or expired refresh token');
+      }
+
+      const user = await this.userRepository.findOne(token.userId);
+
+      // Generate a new access token
+      const accessToken = this.jwtService.sign({
+        userId: token.userId,
+        username: user.username,
+        userRole: user.role ? user.role.flag : Role.User,
+      });
+
+      // Return the new access token
+      return accessToken;
+    } catch (error) {
+      // Handle the error
       throw new BadRequestException(error.message);
     }
   }

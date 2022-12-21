@@ -2,10 +2,10 @@ import {
   Body,
   Controller,
   Get,
-  Put,
   Delete,
   Param,
   UseGuards,
+  Patch,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
@@ -38,7 +38,7 @@ export class UserController {
 
   @ApiBearerAuth()
   @Roles(Role.Admin, Role.Staff)
-  @Put('user/:id')
+  @Patch('user/:id')
   async update(
     @Param('id') id: number,
     @Body() user: UserEntity,

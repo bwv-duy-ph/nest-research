@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppConfiguration } from 'src/config/app.config';
 import { UserEntity } from 'src/modules/users/users.entity';
+import { RefreshToken } from './refresh-token.entity';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UserEntity } from 'src/modules/users/users.entity';
       signOptions: { expiresIn: AppConfiguration.jwt.expiration },
     }),
     TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([RefreshToken]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

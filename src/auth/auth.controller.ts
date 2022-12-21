@@ -1,9 +1,10 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ApiBody } from '@nestjs/swagger';
-import { LoginDto, RegiterDto } from '../dto/auth.dto';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { LoginDto, RefreshTokenDto, RegiterDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 
-@Controller()
+@Controller('auth')
+@ApiTags('Auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @Post('login')
@@ -18,5 +19,14 @@ export class AuthController {
     @Body() user: RegiterDto,
   ): Promise<Record<string, string | number>> {
     return this.authService.register(user);
+  }
+
+  @Post('refresh')
+  @ApiBody({ type: RefreshTokenDto })
+  async refresh(
+    @Body('refreshToken') refreshToken: string,
+  ): Promise<Record<string, string>> {
+    const accessToken = await this.authService.refresh(refreshToken);
+    return { accessToken, refreshToken };
   }
 }

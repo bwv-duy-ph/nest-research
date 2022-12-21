@@ -2,11 +2,11 @@ import {
   Controller,
   Get,
   Post,
-  Put,
   Delete,
   Body,
   Param,
   UseGuards,
+  Patch,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { DeleteResult, UpdateResult } from 'typeorm';
@@ -48,7 +48,7 @@ export class RoleController implements REST {
 
   @ApiBearerAuth()
   @Roles(Role.Admin)
-  @Put('role/:id')
+  @Patch('role/:id')
   async update(
     @Param('id') id: number,
     @Body() role: RoleEntity,
